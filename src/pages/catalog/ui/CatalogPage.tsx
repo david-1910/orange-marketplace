@@ -1,13 +1,12 @@
 import { Outlet, useSearchParams } from 'react-router';
 
-import { CategoryFilter } from '@/features/product/filter-by-category';
+import { CategoryFilter } from '@/features/filter-by-category';
+import { CATALOG_CATEGORY_PARAM } from '@/shared/config';
 import { SplitText } from '@/shared/ui';
-import { ProductGrid } from '@/widgets/ProductGrid';
-
-const CATEGORY_PARAM = 'category';
+import { ProductGrid } from '@/widgets/product-grid';
 
 /**
- * Каталог. Страница только собирает: заголовок, фильтр, bento-сетка.
+ * Каталог. Страница только собирает: заголовок, фильтр, сетку товаров.
  *
  * Выбранная категория живёт в query-параметре, а не в состоянии
  * компонента: ссылку на отфильтрованный каталог можно отправить,
@@ -20,13 +19,13 @@ const CATEGORY_PARAM = 'category';
  */
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const categoryId = searchParams.get(CATEGORY_PARAM);
+  const categoryId = searchParams.get(CATALOG_CATEGORY_PARAM);
 
   const handleCategoryChange = (nextId: string | null) => {
     setSearchParams(
       (params) => {
-        if (nextId) params.set(CATEGORY_PARAM, nextId);
-        else params.delete(CATEGORY_PARAM);
+        if (nextId) params.set(CATALOG_CATEGORY_PARAM, nextId);
+        else params.delete(CATALOG_CATEGORY_PARAM);
         return params;
       },
       { preventScrollReset: true },

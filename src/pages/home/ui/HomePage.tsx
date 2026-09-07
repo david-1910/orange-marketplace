@@ -2,10 +2,10 @@ import { Link } from 'react-router';
 
 import { buildCatalogPath, cursorLabel } from '@/shared/config';
 import { IconArrowUpRight, SectionHeading } from '@/shared/ui';
-import { CategoryStrip } from '@/widgets/CategoryStrip';
-import { HeroPoster } from '@/widgets/HeroPoster';
-import { ProductGrid } from '@/widgets/ProductGrid';
-import { PromoBanner } from '@/widgets/PromoBanner';
+import { CategoryStrip } from '@/widgets/category-strip';
+import { HeroPoster } from '@/widgets/hero-poster';
+import { ProductGrid } from '@/widgets/product-grid';
+import { PromoBanner } from '@/widgets/promo-banner';
 
 /**
  * Главная. Страница только компонует блоки, своей логики не имеет.

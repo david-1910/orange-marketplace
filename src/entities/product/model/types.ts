@@ -27,3 +27,7 @@ export interface Product {
   rating: number;
   reviewsCount: number;
 }
+
+export interface ProductFilters {
+  categoryId?: string;
+}

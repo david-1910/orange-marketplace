@@ -6,7 +6,7 @@ import {
   useCategories,
   useProduct,
 } from '@/entities/product';
-import { AddToCartButton } from '@/features/cart/add-to-cart';
+import { AddToCartButton } from '@/features/add-to-cart';
 import { ROUTES, cursorLabel } from '@/shared/config';
 import {
   Accordion,
@@ -16,7 +16,7 @@ import {
   Skeleton,
   SplitText,
 } from '@/shared/ui';
-import { ProductGallery } from '@/widgets/ProductGallery';
+import { ProductGallery } from '@/widgets/product-gallery';
 
 /**
  * Страница товара: асимметричный сплит 7:5 из пункта 3.6.

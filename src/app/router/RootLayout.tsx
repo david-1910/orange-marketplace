@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router';
 
 import { ScrollProgress } from '@/shared/ui';
-import { CustomCursor } from '@/widgets/CustomCursor';
-import { Footer } from '@/widgets/Footer';
-import { Header } from '@/widgets/Header';
+import { CustomCursor } from '@/widgets/custom-cursor';
+import { Footer } from '@/widgets/footer';
+import { Header } from '@/widgets/header';
 
 /**
  * Общая оболочка всех страниц.

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 
 import { MOTION_TRANSITION, cursorLabel } from '@/shared/config';
-import { useLockBodyScroll } from '@/shared/hooks';
+import { useLockBodyScroll } from '@/shared/lib';
 import { IconClose } from '@/shared/ui';
 
 import { ProductPage } from './ProductPage';
