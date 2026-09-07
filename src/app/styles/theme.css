@@ -1,0 +1,145 @@
+@theme {
+  /* --- Шрифты --- */
+  --font-sans: 'Montserrat Variable', system-ui, sans-serif;
+
+  /* --- Основная палитра: апельсин --- */
+  --color-brand-50: #fff7ed;
+  --color-brand-100: #ffedd5;
+  --color-brand-200: #fed7aa;
+  --color-brand-300: #fdba74;
+  --color-brand-400: #ff8c5a;
+  --color-brand-500: #ff6b35;
+  --color-brand-600: #e85d2c;
+  --color-brand-700: #c2410c;
+  --color-brand-800: #9a3412;
+  --color-brand-900: #7c2d12;
+
+  /* --- Акцентный золотой --- */
+  --color-accent-300: #ffd180;
+  --color-accent-400: #ffb347;
+  --color-accent-500: #f59e0b;
+
+  /* --- Семантика --- */
+  --color-success-100: #dcfce7;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+
+  --color-error-100: #fee2e2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+
+  --color-info-100: #dbeafe;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+
+  /* --- Типографика --- */
+  /* Плакатное слово первого экрана. Отдельная шкала сверх display:
+     бриф требует «слово на весь viewport», а 180px на широком экране
+     занимают пятую часть ширины и композиция рассыпается в пустоту.
+     Размер привязан к vw, чтобы слово держало ширину, но ограничен
+     и по vh: две строки по 0.78 плюс хедер и тикер должны влезть
+     в экран, иначе слово выдавливает тикер за нижнюю кромку. */
+  --text-poster: clamp(2.5rem, min(16vw, 26vh), 18rem);
+  --text-poster--line-height: 0.78;
+  --text-poster--font-weight: 900;
+  --text-poster--letter-spacing: -0.04em;
+
+  /* Display: слова-плакаты. Размеры текучие — 180px на телефоне не живут.
+     Верхняя граница clamp равна значению из брифа. */
+  --text-display-lg: clamp(4rem, 15vw, 11.25rem); /* 64 → 180 */
+  --text-display-lg--line-height: 0.86;
+  --text-display-lg--font-weight: 900;
+  --text-display-lg--letter-spacing: -0.03em;
+
+  --text-display-md: clamp(3.5rem, 10vw, 7rem); /* 56 → 112 */
+  --text-display-md--line-height: 0.9;
+  --text-display-md--font-weight: 900;
+  --text-display-md--letter-spacing: -0.03em;
+
+  --text-display-sm: clamp(2.5rem, 6vw, 4rem); /* 40 → 64 */
+  --text-display-sm--line-height: 0.94;
+  --text-display-sm--font-weight: 800;
+  --text-display-sm--letter-spacing: -0.03em;
+
+  /* Title */
+  --text-title: clamp(1.75rem, 3vw, 2.75rem); /* 28 → 44 */
+  --text-title--line-height: 1.12;
+  --text-title--font-weight: 700;
+  --text-title--letter-spacing: -0.02em;
+
+  /* UI-текст */
+  --text-ui: 0.875rem; /* 14 */
+  --text-ui--line-height: 1.4;
+  --text-ui--font-weight: 500;
+
+  /* Цены: SemiBold + плотный трекинг */
+  --text-price: 0.9375rem; /* 15 */
+  --text-price--line-height: 1.2;
+  --text-price--font-weight: 600;
+  --text-price--letter-spacing: -0.01em;
+
+  /* Микро-лейблы: капс + широкий трекинг */
+  --text-label: 0.6875rem; /* 11 */
+  --text-label--line-height: 1.1;
+  --text-label--font-weight: 500;
+  --text-label--letter-spacing: 0.14em;
+
+  /* Трекинг для самостоятельного применения */
+  --tracking-display: -0.03em;
+  --tracking-label: 0.14em;
+
+  /* --- Тени --- */
+  --shadow-soft: 0 2px 8px rgb(255 107 53 / 0.08);
+  --shadow-lifted: 0 8px 24px rgb(255 107 53 / 0.15);
+  --shadow-float: 0 16px 40px rgb(255 107 53 / 0.2);
+  --shadow-glow: 0 4px 14px rgb(255 107 53 / 0.4);
+
+  /* --- Анимации --- */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-soft: pulse-soft 3s ease-in-out infinite;
+  /* Длительность тикеров задаётся инлайном на инстансе. */
+  --animate-marquee-x: marquee-x 30s linear infinite;
+  --animate-marquee-y: marquee-y 30s linear infinite;
+
+  @keyframes marquee-x {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-y {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
