@@ -4,12 +4,34 @@ import { cn } from '@/shared/lib';
 
 import { SignInModal } from './SignInModal';
 
+/**
+ * primary — крупная кнопка основного действия (пустой профиль,
+ * блок получателя в оформлении). icon — круглый значок в шапке.
+ */
+export type SignInButtonVariant = 'primary' | 'icon';
+
 export interface SignInButtonProps {
   children: ReactNode;
+  variant?: SignInButtonVariant;
   /** Что сделать после успешного входа. */
   onSuccess?: () => void;
   className?: string;
 }
+
+/**
+ * Вид задаётся вариантом, а не переопределением классов снаружи.
+ *
+ * Так и было сделано сначала — шапка передавала `bg-transparent`
+ * поверх базовых классов. Но у базовых был ещё и `hover:bg-brand-500`,
+ * а tailwind-merge считает обычный и hover-вариант разными свойствами
+ * и не гасит один другим. В результате значок аккаунта при наведении
+ * заливался оранжевым целиком, в отличие от соседних иконок.
+ */
+const VARIANTS: Record<SignInButtonVariant, string> = {
+  primary:
+    'text-label hover:bg-brand-500 flex h-14 items-center justify-center gap-2 rounded-full bg-gray-900 px-6 text-white uppercase transition-colors',
+  icon: 'hover:border-brand-500 hover:text-brand-600 grid size-11 place-items-center rounded-full border border-gray-900/10 text-gray-900 transition-colors',
+};
 
 /**
  * Кнопка, открывающая модалку входа.
@@ -20,6 +42,7 @@ export interface SignInButtonProps {
  */
 export function SignInButton({
   children,
+  variant = 'primary',
   onSuccess,
   className,
 }: SignInButtonProps) {
@@ -32,10 +55,7 @@ export function SignInButton({
         onClick={() => setIsOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
-        className={cn(
-          'text-label hover:bg-brand-500 flex h-14 items-center justify-center gap-2 rounded-full bg-gray-900 px-6 text-white uppercase transition-colors',
-          className,
-        )}
+        className={cn(VARIANTS[variant], className)}
       >
         {children}
       </button>

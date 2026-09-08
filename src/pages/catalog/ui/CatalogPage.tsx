@@ -7,6 +7,7 @@ import { FilterPanel, useProductFilters } from '@/features/filter-products';
 import { useProductSearch } from '@/features/search-products';
 import { IconClose, SplitText } from '@/shared/ui';
 import { ProductFeed } from '@/widgets/product-grid';
+import { PromoStrip } from '@/widgets/promo-strip';
 
 /**
  * Раскладка сетки в правой колонке.
@@ -16,7 +17,7 @@ import { ProductFeed } from '@/widgets/product-grid';
  * товары и мельче — так их видно больше за один экран.
  */
 const CATALOG_GRID_CLASSES =
-  'grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5';
+  'grid gap-3 grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))]';
 
 /**
  * Каталог: панель фильтров слева, лента товаров справа.
@@ -119,6 +120,12 @@ export function CatalogPage() {
               filters={feedFilters}
               gridClassName={CATALOG_GRID_CLASSES}
               onTotalChange={handleTotalChange}
+              // Баннер после второй строки сетки, а не первой: сразу
+              // под фильтрами он читался бы как часть шапки каталога,
+              // а не как находка среди товаров. На узких экранах строка
+              // из двух карточек, поэтому восемь — это компромисс между
+              // раскладками.
+              insertion={{ after: 8, content: <PromoStrip /> }}
             />
           </div>
         </div>

@@ -2,9 +2,8 @@ import { useCallback, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 
+import { calcPromoDiscount, findPromoRequest } from '@/entities/promo';
 import { notify } from '@/shared/lib';
-
-import { findPromoRequest, type Promo } from '../api/promo-api';
 
 export interface AppliedPromo {
   code: string;
@@ -19,10 +18,6 @@ export interface PromoState {
   apply: (code: string) => void;
   reset: () => void;
 }
-
-/** Скидка по промокоду с учётом её потолка. */
-const calcPromoDiscount = (promo: Promo, subtotal: number): number =>
-  Math.min(Math.round((subtotal * promo.percent) / 100), promo.maxDiscount);
 
 /**
  * Проверка и применение промокода.

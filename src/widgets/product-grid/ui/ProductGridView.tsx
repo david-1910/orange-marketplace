@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 
@@ -18,6 +18,19 @@ export interface ProductGridViewProps {
   emptyState?: ReactNode;
   /** Классы раскладки сетки, если стандартная не подходит по ширине. */
   gridClassName?: string;
+  /**
+   * Блок, вставленный между карточками, — например баннер с
+   * промокодами.
+   *
+   * Вставляется внутрь сетки, а не над ней: элемент сетки растягивается
+   * на всю строку через col-span-full, поэтому карточки после него
+   * продолжают ту же раскладку, без разрыва на две отдельные сетки.
+   */
+  insertion?: {
+    /** После какой по счёту карточки вставить. */
+    after: number;
+    content: ReactNode;
+  };
   /** Дописывается снизу сетки: сентинел ленты, кнопка «показать ещё». */
   children?: ReactNode;
 }
@@ -66,6 +79,7 @@ export function ProductGridView({
   skeletonCount = 10,
   emptyState,
   gridClassName = DEFAULT_GRID_CLASSES,
+  insertion,
   children,
 }: ProductGridViewProps) {
   if (isLoading) {
@@ -102,14 +116,26 @@ export function ProductGridView({
         className={gridClassName}
       >
         <AnimatePresence mode="popLayout">
-          {products.map((product) => (
-            <motion.div key={product.id} layout variants={CARD_VARIANTS}>
-              <ProductCard
-                product={product}
-                favoriteAction={<FavoriteButton productId={product.id} />}
-                action={<CartItemControl product={product} size="sm" />}
-              />
-            </motion.div>
+          {products.map((product, index) => (
+            <Fragment key={product.id}>
+              <motion.div layout variants={CARD_VARIANTS}>
+                <ProductCard
+                  product={product}
+                  favoriteAction={<FavoriteButton productId={product.id} />}
+                  action={<CartItemControl product={product} size="sm" />}
+                />
+              </motion.div>
+
+              {insertion && index === insertion.after - 1 && (
+                <motion.div
+                  layout
+                  variants={CARD_VARIANTS}
+                  className="col-span-full"
+                >
+                  {insertion.content}
+                </motion.div>
+              )}
+            </Fragment>
           ))}
         </AnimatePresence>
       </motion.div>

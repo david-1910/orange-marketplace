@@ -8,7 +8,7 @@ import {
   useInfiniteProducts,
 } from '@/entities/product';
 
-import { ProductGridView } from './ProductGridView';
+import { ProductGridView, type ProductGridViewProps } from './ProductGridView';
 
 export interface ProductFeedProps {
   /** Готовые фильтры — их собирает фича фильтрации. */
@@ -17,6 +17,8 @@ export interface ProductFeedProps {
   gridClassName?: string;
   /** Сообщить наружу, сколько всего товаров нашлось. */
   onTotalChange?: (total: number) => void;
+  /** Блок между карточками — баннер промокодов. */
+  insertion?: ProductGridViewProps['insertion'];
 }
 
 /**
@@ -39,6 +41,7 @@ export function ProductFeed({
   filters,
   gridClassName,
   onTotalChange,
+  insertion,
 }: ProductFeedProps) {
   const {
     data,
@@ -83,6 +86,7 @@ export function ProductFeed({
         onRetry={() => void refetch()}
         skeletonCount={PRODUCTS_PAGE_SIZE}
         {...(gridClassName ? { gridClassName } : {})}
+        {...(insertion ? { insertion } : {})}
       >
         {shown > 0 && (
           <div className="mt-10 flex flex-col items-center gap-5">

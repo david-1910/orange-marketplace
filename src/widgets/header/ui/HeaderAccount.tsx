@@ -1,38 +1,62 @@
 import { Link } from 'react-router';
 
-import { useIsAuthorized } from '@/entities/user';
+import { useUser } from '@/entities/user';
 import { SignInButton } from '@/features/sign-in';
 import { ROUTES } from '@/shared/config';
 import { IconUser } from '@/shared/ui';
 
 /**
- * Иконка аккаунта в хедере.
+ * Первая буква имени для значка аккаунта.
  *
- * Гостю открывает модалку входа, вошедшему — ведёт в профиль.
- * Две роли в одном месте: значок в шапке всегда на одной позиции, и
- * переключение вида по состоянию честнее, чем показывать вошедшему
- * кнопку «Войти» или гостю ссылку на пустой профиль.
+ * Если имя пустое или начинается с пробела, буквы не будет — тогда
+ * показывается обычная иконка, а не пустой оранжевый круг.
+ */
+const getInitial = (name: string): string | null =>
+  name.trim().charAt(0).toUpperCase() || null;
+
+/**
+ * Значок аккаунта в шапке.
  *
- * Подписан на boolean, а не на самого пользователя: шапке нужно лишь
- * знать, вошёл он или нет, и от смены имени она перерисовываться не
- * должна.
+ * Состояния различаются намеренно и заметно:
+ *
+ * - гость видит контурный значок, такой же как поиск, избранное и
+ *   корзина, — это приглашение войти, а не признак чего-либо;
+ * - вошедший видит залитый оранжевым круг с первой буквой своего
+ *   имени. Заливка здесь и есть знак «вы вошли»: среди четырёх
+ *   одинаковых контурных кружков заполненный читается сразу, а буква
+ *   отвечает на следующий вопрос — под кем именно.
+ *
+ * Раньше оба состояния выглядели одинаково, и понять, вошёл ты или
+ * нет, можно было только заглянув в профиль.
  */
 export function HeaderAccount() {
-  const isAuthorized = useIsAuthorized();
+  const user = useUser();
 
-  const CIRCLE =
-    'hover:border-brand-500 hover:text-brand-600 grid size-11 place-items-center rounded-full border border-gray-900/10 text-gray-900 transition-colors';
+  if (user) {
+    const initial = getInitial(user.name);
 
-  if (isAuthorized) {
     return (
-      <Link to={ROUTES.profile} aria-label="Профиль" className={CIRCLE}>
-        <IconUser className="size-5" />
+      <Link
+        to={ROUTES.profile}
+        aria-label={`Профиль: ${user.name}`}
+        title={user.name}
+        className="bg-brand-500 hover:bg-brand-600 shadow-soft grid size-11 place-items-center rounded-full text-white transition-colors"
+      >
+        {initial ? (
+          <span aria-hidden className="text-ui font-semibold">
+            {initial}
+          </span>
+        ) : (
+          <IconUser className="size-5" />
+        )}
       </Link>
     );
   }
 
   return (
-    <SignInButton className={`${CIRCLE} h-11 bg-transparent px-0`}>
+    // Вариант icon, а не подгонка классами снаружи: у крупной кнопки
+    // есть свои hover-стили, и погасить их через className не выходит.
+    <SignInButton variant="icon">
       <IconUser className="size-5" />
       <span className="sr-only">Войти</span>
     </SignInButton>
