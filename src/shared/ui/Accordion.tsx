@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react';
 
 import { AnimatePresence, motion } from 'motion/react';
 
-import { MOTION_TRANSITION, cursorLabel } from '@/shared/config';
+import { MOTION_TRANSITION } from '@/shared/config';
 import { cn } from '@/shared/lib';
 
 export interface AccordionItem {
@@ -39,7 +39,6 @@ export function Accordion({ items, defaultOpenId, className }: AccordionProps) {
               type="button"
               onClick={() => setOpenId(isOpen ? null : item.id)}
               aria-expanded={isOpen}
-              {...cursorLabel(isOpen ? 'свернуть' : 'открыть')}
               className="flex w-full items-center justify-between gap-4 py-4 text-left"
             >
               <span className="text-ui font-semibold text-gray-900">

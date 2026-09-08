@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-import { ROUTES, cursorLabel } from '@/shared/config';
+import { ROUTES } from '@/shared/config';
 import { IconCardPay, IconTruck, LogoFull, Magnet } from '@/shared/ui';
 
 const LINK_GROUPS = [
@@ -27,7 +27,7 @@ export function Footer() {
     <footer className="mt-10 border-t border-gray-900/10 bg-white">
       <div className="mx-auto flex w-full max-w-[110rem] flex-col gap-10 px-4 py-12 sm:px-8 lg:flex-row lg:justify-between">
         <div className="flex flex-col gap-4">
-          <Link to={ROUTES.home} {...cursorLabel('на главную')}>
+          <Link to={ROUTES.home}>
             <LogoFull />
           </Link>
 
@@ -58,7 +58,6 @@ export function Footer() {
                 <Magnet key={link.label} radius={60} strength={0.25}>
                   <Link
                     to={link.to}
-                    {...cursorLabel(link.label)}
                     className="text-ui hover:text-brand-600 text-gray-900 transition-colors"
                   >
                     {link.label}

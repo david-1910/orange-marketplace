@@ -58,7 +58,15 @@ export function SplitText({
           // корректный ключ: порядок частей неизменен.
           key={`${part}-${index}`}
           aria-hidden
-          className="inline-flex overflow-hidden align-bottom"
+          // overflow-hidden — это маска, из-под которой выезжают
+          // буквы (initial y: 110%). Но у display-шкалы line-height
+          // меньше единицы (0.94 у display-sm, 0.78 у плаката),
+          // поэтому глиф выше своего строчного бокса, и маска срезала
+          // ему верхушку: у «Ё» пропадали точки, у прописных —
+          // кончики. Запас сверху даёт padding, а отрицательный
+          // margin возвращает блок на прежнее место в потоке, так что
+          // нижняя кромка маски и раскладка не меняются.
+          className="-mt-[0.2em] inline-flex overflow-hidden pt-[0.2em] align-bottom"
         >
           <motion.span
             // whitespace-pre обязателен: пробел внутри inline-flex

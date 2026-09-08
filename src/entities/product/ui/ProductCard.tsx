@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Link } from 'react-router';
 
-import { ROUTES, buildPath, cursorLabel } from '@/shared/config';
+import { ROUTES, buildPath } from '@/shared/config';
 import { cn } from '@/shared/lib';
 import { Badge, IconStar } from '@/shared/ui';
 
@@ -20,24 +20,37 @@ export interface ProductCardProps {
    * собирает сетку, подставляет её сам.
    */
   action?: ReactNode;
+  /**
+   * Слот поверх фотографии — например сердечко «в избранное».
+   *
+   * Отдельный слот, а не тот же `action`: у этих двух действий
+   * разные места в карточке и разная механика (одно листает в
+   * корзину, другое не должно уводить по ссылке), поэтому
+   * подставлять их надо независимо.
+   */
+  favoriteAction?: ReactNode;
   className?: string;
 }
 
-export function ProductCard({ product, action, className }: ProductCardProps) {
+export function ProductCard({
+  product,
+  action,
+  favoriteAction,
+  className,
+}: ProductCardProps) {
   const discount = getDiscountPercent(product);
 
   return (
     <article
       className={cn(
-        'group hover:border-brand-300 hover:shadow-lifted flex h-full flex-col gap-3 rounded-2xl border border-gray-900/5 bg-white p-3 transition-all hover:-translate-y-0.5',
+        'group hover:border-brand-300 hover:shadow-lifted flex h-full flex-col gap-2 rounded-xl border border-gray-900/5 bg-white p-2.5 transition-all hover:-translate-y-0.5',
         !product.inStock && 'opacity-70',
         className,
       )}
     >
       <Link
         to={buildPath(ROUTES.catalogProduct, { id: product.id })}
-        {...cursorLabel('смотреть')}
-        className="flex flex-1 flex-col gap-3"
+        className="flex flex-1 flex-col gap-2"
       >
         <div className="bg-brand-50 relative overflow-hidden rounded-xl">
           <img
@@ -51,20 +64,24 @@ export function ProductCard({ product, action, className }: ProductCardProps) {
             {discount !== null && <Badge>−{discount}%</Badge>}
             {!product.inStock && <Badge tone="neutral">Нет в наличии</Badge>}
           </div>
+
+          {favoriteAction && (
+            <div className="absolute top-2 right-2">{favoriteAction}</div>
+          )}
         </div>
 
         <p className="text-ui group-hover:text-brand-600 line-clamp-2 font-medium text-gray-900 transition-colors">
           {product.title}
         </p>
 
-        <div className="text-label flex items-center gap-1.5 text-gray-400">
+        <div className="text-label flex items-center gap-1 text-gray-400">
           <IconStar className="text-accent-500 size-3.5" />
           <span className="tabular-nums">{product.rating}</span>
           <span aria-hidden>·</span>
           <span className="tabular-nums">{product.reviewsCount}</span>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-baseline gap-2">
+        <div className="mt-auto flex flex-wrap items-baseline gap-1.5">
           <span className="text-price text-gray-900 tabular-nums">
             {formatPrice(product.price)}
           </span>

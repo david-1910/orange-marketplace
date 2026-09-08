@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-import { ROUTES, cursorLabel } from '@/shared/config';
+import { ROUTES } from '@/shared/config';
 import { IconArrowUpRight, SectionHeading } from '@/shared/ui';
 import { CategoryStrip } from '@/widgets/category-strip';
 import { HeroPoster } from '@/widgets/hero-poster';
@@ -30,7 +30,6 @@ export function HomePage() {
           action={
             <Link
               to={ROUTES.catalog}
-              {...cursorLabel('все товары')}
               className="text-label hover:border-brand-500 hover:text-brand-600 flex items-center gap-2 rounded-full border border-gray-900/10 px-5 py-3 text-gray-900 uppercase transition-colors"
             >
               Все товары
@@ -40,6 +39,20 @@ export function HomePage() {
         />
 
         <ProductGrid categoryId={null} limit={10} />
+
+        {/* Вторая ссылка в ту же секцию — не дублирование: компактная
+            в заголовке нужна тем, кто ещё не начал смотреть подборку,
+            а эта — тем, кто дошёл до конца десяти товаров и хочет
+            остальные. Дочитавшему возвращаться наверх незачем. */}
+        <div className="mt-10 flex justify-center">
+          <Link
+            to={ROUTES.catalog}
+            className="text-label hover:bg-brand-500 flex h-14 items-center gap-3 rounded-full bg-gray-900 px-8 text-white uppercase transition-colors"
+          >
+            Смотреть все товары
+            <IconArrowUpRight className="size-4" />
+          </Link>
+        </div>
       </section>
 
       <PromoBanner />

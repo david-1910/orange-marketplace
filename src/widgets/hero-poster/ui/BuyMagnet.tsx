@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-import { ROUTES, cursorLabel } from '@/shared/config';
+import { ROUTES } from '@/shared/config';
 import {
   CircularText,
   ClickSpark,
@@ -30,7 +30,6 @@ export function BuyMagnet() {
         <Link
           to={ROUTES.catalog}
           aria-label="Перейти в каталог"
-          {...cursorLabel('в каталог')}
           className="hover:bg-brand-500 relative flex size-28 items-center justify-center rounded-full bg-gray-900 text-white transition-colors"
         >
           <CircularText text={CIRCLE_TEXT} className="absolute inset-0" />

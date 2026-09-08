@@ -1,4 +1,3 @@
-export { CURSOR_LABEL_ATTRIBUTE, cursorLabel } from './cursor';
 export {
   MOTION_DURATION,
   MOTION_EASE_OUT,

@@ -31,17 +31,28 @@
     @apply bg-brand-200 text-brand-900;
   }
 
-  /* Кастомный курсор ставит на body класс cursor-none. Само по себе
-     это не работает на ссылках и кнопках: браузер задаёт им
-     собственный cursor: pointer, а своё значение всегда бьёт
-     унаследованное — и над кнопкой вместо кружка возвращалась
-     системная стрелка. Поэтому гасим курсор и на них. */
-  body.cursor-none,
-  body.cursor-none a,
-  body.cursor-none button,
-  body.cursor-none input,
-  body.cursor-none [role='button'] {
-    cursor: none;
+  /* --- Курсор у интерактивных элементов ---
+
+     Tailwind 4 убрал из Preflight правило `button { cursor: pointer }`,
+     которое было в третьей версии. Из-за этого над всеми кнопками
+     проекта стояла обычная стрелка, и расставлять `cursor-pointer` по
+     месту пришлось бы десятки раз — а каждая новая кнопка снова
+     оказалась бы без курсора. Поэтому правило живёт здесь, один раз.
+
+     aria-disabled учитывается наравне с disabled: в проекте кнопки
+     отключаются именно им, чтобы не выпадать из обхода по Tab и
+     сообщать причину недоступности. Курсор обязан говорить то же,
+     что атрибут, иначе он обещает действие, которого не будет. */
+  button:not(:disabled):not([aria-disabled='true']),
+  [role='button']:not([aria-disabled='true']),
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  button[aria-disabled='true'],
+  [role='button'][aria-disabled='true'] {
+    cursor: not-allowed;
   }
 
   /* --- Скроллбар --- */

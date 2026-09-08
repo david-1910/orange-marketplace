@@ -25,6 +25,11 @@ export const ROUTES = {
   catalog: '/catalog',
   catalogProduct: '/catalog/product/:id',
   product: '/product/:id',
+  favorites: '/favorites',
+  cart: '/cart',
+  checkout: '/checkout',
+  order: '/order/:id',
+  profile: '/profile',
 } as const;
 
 export type TRoutePattern = (typeof ROUTES)[keyof typeof ROUTES];

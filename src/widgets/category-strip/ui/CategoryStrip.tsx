@@ -2,11 +2,7 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router';
 
 import { buildCatalogCategoryPath, useCategories } from '@/entities/category';
-import {
-  MOTION_STAGGER,
-  MOTION_TRANSITION,
-  cursorLabel,
-} from '@/shared/config';
+import { MOTION_STAGGER, MOTION_TRANSITION } from '@/shared/config';
 import { SectionHeading, Skeleton } from '@/shared/ui';
 
 const STRIP_VARIANTS = {
@@ -35,7 +31,7 @@ export function CategoryStrip() {
       <SectionHeading label="Категории" title="Куда пойдём" className="mb-6" />
 
       {isPending ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {Array.from({ length: 6 }, (_, index) => (
             <Skeleton key={index} className="h-28" />
           ))}
@@ -46,13 +42,12 @@ export function CategoryStrip() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6"
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5"
         >
           {categories?.map((category) => (
             <motion.div key={category.id} variants={ITEM_VARIANTS}>
               <Link
                 to={buildCatalogCategoryPath(category.id)}
-                {...cursorLabel(category.title)}
                 className="hover:border-brand-400 hover:bg-brand-50 flex h-28 flex-col items-start justify-between rounded-2xl border border-gray-900/5 bg-white p-4 transition-colors"
               >
                 <span aria-hidden className="text-3xl leading-none">

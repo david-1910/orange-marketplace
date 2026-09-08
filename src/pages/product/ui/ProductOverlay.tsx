@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { motion } from 'motion/react';
 
-import { MOTION_TRANSITION, cursorLabel } from '@/shared/config';
+import { MOTION_TRANSITION } from '@/shared/config';
 import { useLockBodyScroll } from '@/shared/lib';
 import { IconClose } from '@/shared/ui';
 
@@ -39,7 +39,6 @@ export function ProductOverlay() {
         type="button"
         onClick={() => void navigate(-1)}
         aria-label="Закрыть"
-        {...cursorLabel('закрыть')}
         className="hover:border-brand-500 hover:text-brand-600 fixed top-6 right-6 z-10 grid size-11 place-items-center rounded-full border border-gray-900/10 bg-white/80 text-gray-900 backdrop-blur-xl transition-colors"
       >
         <IconClose className="size-5" />

@@ -11,6 +11,7 @@ export {
   type ButtonProps,
 } from './Button';
 export { Card, type CardVariant, type CardProps } from './Card';
+export { Checkbox, type CheckboxProps } from './Checkbox';
 export { CircularText, type CircularTextProps } from './CircularText';
 export { ClickSpark, type ClickSparkProps } from './ClickSpark';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
@@ -21,8 +22,20 @@ export { LogoMark, type LogoMarkProps } from './LogoMark';
 export { LogoMonogram, type LogoMonogramProps } from './LogoMonogram';
 export { Magnet, type MagnetProps } from './Magnet';
 export { Marquee, type MarqueeProps } from './Marquee';
+export { Modal, type ModalProps } from './Modal';
 export { Noise, type NoiseProps } from './Noise';
+export {
+  QuantityStepper,
+  type QuantityStepperSize,
+  type QuantityStepperProps,
+} from './QuantityStepper';
+export { RangeSlider, type RangeSliderProps } from './RangeSlider';
 export { ScrollProgress, type ScrollProgressProps } from './ScrollProgress';
+export {
+  ScrollSwiper,
+  type ScrollSwiperArrow,
+  type ScrollSwiperProps,
+} from './ScrollSwiper';
 export { SectionHeading, type SectionHeadingProps } from './SectionHeading';
 export { Skeleton, type SkeletonProps } from './Skeleton';
 export {

@@ -1,4 +1,6 @@
 export { cn } from './cn';
+export { useBumpOnChange } from './useBumpOnChange';
+export { useDebouncedValue } from './useDebouncedValue';
 export { useElementRect, type ElementRect } from './useElementRect';
 export { useFontsReady } from './useFontsReady';
 export { useLockBodyScroll } from './useLockBodyScroll';

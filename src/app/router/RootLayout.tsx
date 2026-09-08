@@ -1,22 +1,21 @@
 import { Outlet } from 'react-router';
 
 import { ScrollProgress } from '@/shared/ui';
-import { CustomCursor } from '@/widgets/custom-cursor';
 import { Footer } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
 
 /**
  * Общая оболочка всех страниц.
  *
- * Нить прогресса и кастомный курсор живут здесь: по брифу это
- * единственные элементы, постоянные на всех экранах. Header и Footer
- * придут сюда же, когда появятся как виджеты.
+ * Нить прогресса живёт здесь: это единственный декоративный элемент,
+ * постоянный на всех экранах. Указатель оставлен нативным — в
+ * магазине курсор работает индикатором «это кликабельно», и подменять
+ * его значило бы гасить аффордансы ссылок, кнопок и текста.
  */
 export function RootLayout() {
   return (
     <div className="flex min-h-svh flex-col">
       <ScrollProgress />
-      <CustomCursor />
       <Header />
 
       <main className="flex-1">

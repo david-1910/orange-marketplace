@@ -1,45 +1,127 @@
+import { useCallback, useMemo, useState } from 'react';
+
 import { Outlet } from 'react-router';
 
-import {
-  CategoryFilter,
-  useCategoryFilter,
-} from '@/features/filter-by-category';
-import { SplitText } from '@/shared/ui';
-import { ProductGrid } from '@/widgets/product-grid';
+import type { ProductFilters } from '@/entities/product';
+import { FilterPanel, useProductFilters } from '@/features/filter-products';
+import { useProductSearch } from '@/features/search-products';
+import { IconClose, SplitText } from '@/shared/ui';
+import { ProductFeed } from '@/widgets/product-grid';
 
 /**
- * Каталог. Страница только собирает: заголовок, фильтр, сетку товаров.
+ * Раскладка сетки в правой колонке.
  *
- * Выбранной категорией владеет фича: useCategoryFilter читает и пишет
- * query-параметр, страница лишь раздаёт значение фильтру и сетке —
- * так у обеих сторон один источник правды, а знание о самом параметре
- * из страницы ушло.
+ * Колонок меньше, чем во всю ширину: рядом стоит панель фильтров, и
+ * прежние пять на этой ширине давали сплющенные карточки. Здесь же
+ * товары и мельче — так их видно больше за один экран.
+ */
+const CATALOG_GRID_CLASSES =
+  'grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5';
+
+/**
+ * Каталог: панель фильтров слева, лента товаров справа.
+ *
+ * Панель липкая и едет вместе с прокруткой — `top-24` держит её под
+ * шапкой (та `fixed` высотой 92px на широких экранах), а не за ней.
+ *
+ * Фильтрами и поиском владеют разные фичи, и страница их соединяет:
+ * фильтры задаются только здесь, а запрос приходит из шапки, то есть
+ * с любой страницы. Обе части хранят себя в query-параметрах, поэтому
+ * ссылка на «кроссовки дешевле пяти миллионов» открывается в том же
+ * виде.
  *
  * Outlet держит место под overlay товара: каталог остаётся
  * смонтированным, поэтому изображение может перелететь из модуля
- * сетки в галерею через layoutId.
+ * ленты в галерею через layoutId.
  */
 export function CatalogPage() {
-  const { categoryId, setCategoryId } = useCategoryFilter();
+  const filters = useProductFilters();
+  const search = useProductSearch();
+  const [total, setTotal] = useState(0);
+
+  // Колбэк стабилен: иначе он менялся бы на каждый рендер страницы и
+  // перезапускал эффект внутри ленты.
+  const handleTotalChange = useCallback((value: number) => {
+    setTotal(value);
+  }, []);
+
+  const feedFilters = useMemo<ProductFilters>(
+    () => ({
+      ...filters.filters,
+      ...(search.query ? { query: search.query } : {}),
+    }),
+    [filters.filters, search.query],
+  );
 
   return (
     <>
       <div className="mx-auto w-full max-w-[110rem] px-4 pt-28 pb-20 sm:px-8 sm:pt-32">
-        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex flex-col gap-3">
-            <span className="text-label text-gray-400 uppercase">
-              02 — Каталог
-            </span>
-            <p aria-hidden className="text-display-sm text-gray-900 uppercase">
-              <SplitText text="Всё сразу" by="word" stagger={0.06} />
-            </p>
-            <h1 className="sr-only">Каталог товаров</h1>
-          </div>
+        <div className="mb-8 flex flex-col gap-3">
+          <span className="text-label text-gray-400 uppercase">
+            02 — Каталог
+          </span>
+          <p aria-hidden className="text-display-sm text-gray-900 uppercase">
+            <SplitText
+              // Заголовок меняется вместе с запросом: увидеть слово,
+              // которое искал, важнее, чем красивое «Всё сразу».
+              text={search.query ? 'Поиск' : 'Всё сразу'}
+              by="word"
+              stagger={0.06}
+            />
+          </p>
+          <h1 className="sr-only">
+            {search.query
+              ? `Результаты поиска: ${search.query}`
+              : 'Каталог товаров'}
+          </h1>
 
-          <CategoryFilter value={categoryId} onChange={setCategoryId} />
+          {search.query && (
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-ui text-gray-500">
+                По запросу «{search.query}» — {total}
+              </p>
+
+              <button
+                type="button"
+                onClick={search.clear}
+                className="text-label hover:border-brand-500 hover:text-brand-600 flex items-center gap-1.5 rounded-full border border-gray-900/10 px-3 py-1.5 text-gray-500 uppercase transition-colors"
+              >
+                <IconClose className="size-3.5" />
+                Сбросить поиск
+              </button>
+            </div>
+          )}
         </div>
 
-        <ProductGrid categoryId={categoryId} />
+        <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-3">
+            {/* 7rem = 96px отступа сверху под шапкой плюс 16px снизу,
+                чтобы панель не упиралась в кромку экрана. Своя
+                прокрутка остаётся страховкой для низких окон: без неё
+                нижние фильтры стали бы недостижимы. */}
+            <div
+              data-lenis-prevent
+              className="lg:sticky lg:top-24 lg:max-h-[calc(100svh-7rem)] lg:overflow-y-auto"
+            >
+              <FilterPanel
+                filters={filters}
+                footer={
+                  <p className="text-ui text-gray-500 tabular-nums">
+                    Найдено {total}
+                  </p>
+                }
+              />
+            </div>
+          </div>
+
+          <div className="lg:col-span-9">
+            <ProductFeed
+              filters={feedFilters}
+              gridClassName={CATALOG_GRID_CLASSES}
+              onTotalChange={handleTotalChange}
+            />
+          </div>
+        </div>
       </div>
 
       <Outlet />

@@ -1,22 +1,26 @@
 import { Link, useParams } from 'react-router';
 
+import { useCartQuantity } from '@/entities/cart';
 import { useCategory } from '@/entities/category';
 import {
   formatPrice,
   getDiscountPercent,
   useProduct,
 } from '@/entities/product';
-import { AddToCartButton } from '@/features/add-to-cart';
-import { ROUTES, cursorLabel } from '@/shared/config';
+import { CartItemControl } from '@/features/manage-cart-item';
+import { FavoriteButton } from '@/features/toggle-favorite';
+import { ROUTES } from '@/shared/config';
 import {
   Accordion,
   Badge,
   ErrorState,
+  IconArrowUpRight,
   IconStar,
   Skeleton,
   SplitText,
 } from '@/shared/ui';
 import { ProductGallery } from '@/widgets/product-gallery';
+import { ProductReviews } from '@/widgets/product-reviews';
 
 /**
  * Страница товара: асимметричный сплит 7:5 из пункта 3.6.
@@ -28,6 +32,7 @@ export function ProductPage() {
   const { id } = useParams<'id'>();
   const { data: product, isPending, isError, refetch } = useProduct(id);
   const { data: category } = useCategory(product?.categoryId);
+  const cartQuantity = useCartQuantity(product?.id ?? '');
 
   if (isPending) {
     return (
@@ -59,17 +64,24 @@ export function ProductPage() {
 
   return (
     <div className="mx-auto grid w-full max-w-360 gap-10 px-4 pt-24 pb-16 sm:px-8 lg:grid-cols-12 lg:gap-16">
-      <div className="lg:col-span-7">
-        <div className="lg:sticky lg:top-24">
-          <ProductGallery product={product} />
-        </div>
+      <div className="flex flex-col gap-10 lg:col-span-7">
+        <ProductGallery product={product} />
+
+        {/* Отзывы прямо под фотографиями, как вы и просили. Галерея
+            из-за этого перестала прилипать: прилипший блок увёз бы
+            отзывы за пределы экрана, и до них нельзя было бы
+            добраться прокруткой. */}
+        <ProductReviews
+          productId={product.id}
+          rating={product.rating}
+          reviewsCount={product.reviewsCount}
+        />
       </div>
 
       <div className="flex flex-col gap-6 lg:col-span-5">
         <div className="text-label flex items-center gap-2 text-gray-400 uppercase">
           <Link
             to={ROUTES.catalog}
-            {...cursorLabel('каталог')}
             className="hover:text-brand-600 transition-colors"
           >
             Каталог
@@ -90,12 +102,16 @@ export function ProductPage() {
         </div>
 
         <div className="flex flex-wrap items-end gap-4">
-          <span className="text-display-sm text-gray-900 tabular-nums">
+          {/* Цена набрана title, а не display: в сумах это 14 знаков,
+              и display-sm на 64px рвал сумму на две строки в колонке
+              5/12. Плакатную роль на этой странице играет название
+              товара, цене крупнее title быть незачем. */}
+          <span className="text-title whitespace-nowrap text-gray-900 tabular-nums">
             {formatPrice(product.price)}
           </span>
 
           {product.oldPrice && (
-            <span className="text-title text-gray-400 tabular-nums line-through">
+            <span className="text-total whitespace-nowrap text-gray-400 tabular-nums line-through">
               {formatPrice(product.oldPrice)}
             </span>
           )}
@@ -103,7 +119,33 @@ export function ProductPage() {
           {discount !== null && <Badge className="mb-2">−{discount}%</Badge>}
         </div>
 
-        <AddToCartButton product={product} />
+        <div className="flex flex-col gap-3">
+          <div className="flex items-stretch gap-3">
+            <CartItemControl product={product} className="flex-1" />
+
+            {/* Сердечко рядом с кнопкой корзины, а не в углу фото:
+                на странице товара решение «куплю потом» принимают
+                здесь же, где смотрят на цену. Размер подогнан под
+                контрол — tailwind-merge заменяет базовый size-9. */}
+            <FavoriteButton
+              productId={product.id}
+              variant="plain"
+              className="size-14 shrink-0 rounded-full border border-gray-900/10"
+            />
+          </div>
+
+          {/* Появляется только когда товар уже в корзине: до этого
+              оформлять нечего, и кнопка звала бы в пустой чекаут. */}
+          {cartQuantity > 0 && (
+            <Link
+              to={ROUTES.checkout}
+              className="text-label hover:border-brand-500 hover:text-brand-600 flex h-12 items-center justify-center gap-2 rounded-full border border-gray-900/10 text-gray-900 uppercase transition-colors"
+            >
+              Перейти к оформлению
+              <IconArrowUpRight className="size-4" />
+            </Link>
+          )}
+        </div>
 
         <Accordion
           defaultOpenId="specs"
