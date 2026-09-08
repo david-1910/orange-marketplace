@@ -28,23 +28,25 @@ export function ProductOverlay() {
   useLockBodyScroll();
 
   return (
-    <motion.div
-      data-lenis-prevent
-      className="fixed inset-0 z-40 overflow-y-auto bg-white"
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={MOTION_TRANSITION.section}
-    >
+    <>
       <button
         type="button"
         onClick={() => void navigate(-1)}
         aria-label="Закрыть"
-        className="hover:border-brand-500 hover:text-brand-600 fixed top-6 right-6 z-10 grid size-11 place-items-center rounded-full border border-gray-900/10 bg-white/80 text-gray-900 backdrop-blur-xl transition-colors"
+        className="hover:border-brand-500 hover:text-brand-600 fixed top-6 right-6 z-50 grid size-11 place-items-center rounded-full border border-gray-900/10 bg-white/80 text-gray-900 backdrop-blur-xl transition-colors"
       >
         <IconClose className="size-5" />
       </button>
 
-      <ProductPage />
-    </motion.div>
+      <motion.div
+        data-lenis-prevent
+        className="fixed inset-0 z-40 overflow-y-scroll bg-white"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={MOTION_TRANSITION.section}
+      >
+        <ProductPage />
+      </motion.div>
+    </>
   );
 }

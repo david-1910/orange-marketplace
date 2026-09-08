@@ -23,8 +23,6 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.catalog,
         element: <CatalogPage />,
-        // Overlay поверх живого каталога — так работает
-        // layoutId-перелёт изображения товара.
         children: [
           { path: ROUTES.catalogProduct, element: <ProductOverlay /> },
         ],
