@@ -24,4 +24,9 @@ export type {
   OrderStatus,
   PaymentMethod,
 } from './model/types';
-export { useOrder, useOrderActions, useOrders } from './model/useOrders';
+export {
+  useOrder,
+  useOrderActions,
+  useOrders,
+  useOrdersByPhone,
+} from './model/useOrders';

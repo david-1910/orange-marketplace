@@ -1,4 +1,5 @@
 export { cn } from './cn';
+export { notify } from './notify';
 export { useBumpOnChange } from './useBumpOnChange';
 export { useDebouncedValue } from './useDebouncedValue';
 export { useElementRect, type ElementRect } from './useElementRect';

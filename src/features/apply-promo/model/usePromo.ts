@@ -2,6 +2,8 @@ import { useCallback, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 
+import { notify } from '@/shared/lib';
+
 import { findPromoRequest, type Promo } from '../api/promo-api';
 
 export interface AppliedPromo {
@@ -42,14 +44,15 @@ export const usePromo = (subtotal: number): PromoState => {
       if (!promo) {
         setApplied(null);
         setError('Такого промокода нет');
+        notify.error('Такого промокода нет');
         return;
       }
 
+      const discount = calcPromoDiscount(promo, subtotal);
+
       setError(null);
-      setApplied({
-        code: promo.code,
-        discount: calcPromoDiscount(promo, subtotal),
-      });
+      setApplied({ code: promo.code, discount });
+      notify.success(`Промокод ${promo.code} применён`);
     },
     onError: () => setError('Не удалось проверить промокод'),
   });

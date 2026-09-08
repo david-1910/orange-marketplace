@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useUserActions } from '@/entities/user';
+import { notify } from '@/shared/lib';
 
 import {
   PHONE_DIGITS,
@@ -49,6 +50,8 @@ export const useSignInForm = (): SignInForm => {
     }
 
     signIn(phone);
+    notify.success('Вы вошли');
+
     return true;
   }, [phone, signIn]);
 

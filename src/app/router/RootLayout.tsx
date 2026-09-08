@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 
-import { ScrollProgress } from '@/shared/ui';
+import { ScrollProgress, Toaster } from '@/shared/ui';
 import { Footer } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
 
@@ -16,6 +16,7 @@ export function RootLayout() {
   return (
     <div className="flex min-h-svh flex-col">
       <ScrollProgress />
+      <Toaster />
       <Header />
 
       <main className="flex-1">

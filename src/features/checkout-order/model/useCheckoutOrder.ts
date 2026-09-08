@@ -13,6 +13,7 @@ import {
 } from '@/entities/order';
 import { useUser } from '@/entities/user';
 import { ROUTES, buildPath } from '@/shared/config';
+import { notify } from '@/shared/lib';
 
 export interface CheckoutTotals {
   fullPrice: number;
@@ -117,6 +118,8 @@ export const useCheckoutOrder = ({
         recipient: { name: user.name, phone: user.phone },
         total,
       });
+
+      notify.success(`Заказ № ${order.number} оплачен`);
 
       // Переход раньше очистки корзины — это важно, а не вкусовое.
       // Страница оформления сама уводит в корзину, когда оформлять

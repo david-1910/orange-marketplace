@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 
 import { type ProductFilters, useProducts } from '@/entities/product';
 
@@ -44,12 +44,21 @@ export function ProductGrid({
   limit,
   emptyState,
 }: ProductGridProps) {
-  const {
-    data: products,
-    isLoading,
-    isError,
-    refetch,
-  } = useProducts(toFilters({ categoryId, ids, limit }));
+  const { data, isLoading, isError, refetch } = useProducts(
+    toFilters({ categoryId, ids, limit }),
+  );
+
+  /**
+   * Пока едет ответ на новый список ids, показываются прежние
+   * данные — иначе сетка мигала бы скелетонами на каждое снятие
+   * сердечка. Но прежние данные содержат уже убранный товар,
+   * поэтому сверяем их с актуальным списком: карточка исчезает
+   * сразу по клику, а не через задержку запроса.
+   */
+  const products = useMemo(
+    () => (ids && data ? data.filter((item) => ids.includes(item.id)) : data),
+    [ids, data],
+  );
 
   return (
     <ProductGridView

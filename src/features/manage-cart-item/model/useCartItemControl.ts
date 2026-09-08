@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { useCartActions, useCartQuantity } from '@/entities/cart';
 import type { Product } from '@/entities/product';
+import { notify } from '@/shared/lib';
 
 export interface CartItemControlState {
   /** 0 — товара в корзине нет, показываем кнопку «В корзину». */
@@ -35,15 +36,32 @@ export const useCartItemControl = (product: Product): CartItemControlState => {
     isUnavailable,
     label: isUnavailable ? 'Нет в наличии' : 'В корзину',
     add: useCallback(() => {
-      if (product.inStock) add(product.id);
+      if (!product.inStock) return;
+
+      add(product.id);
+      notify.success('Товар в корзине');
     }, [add, product.id, product.inStock]),
+
     increment: useCallback(
       () => increment(product.id),
       [increment, product.id],
     ),
-    decrement: useCallback(
-      () => decrement(product.id),
-      [decrement, product.id],
-    ),
+
+    /**
+     * Сообщаем только про удаление позиции, а не про каждое
+     * уменьшение: тост на каждый клик по минусу превратился бы в
+     * очередь уведомлений, пока человек убирает пять штук.
+     *
+     * Возврат кнопкой в уведомлении добавляет одну штуку, а не
+     * прежнее количество: удаляется позиция всегда с единицы, потому
+     * что минус на большем количестве просто уменьшает её.
+     */
+    decrement: useCallback(() => {
+      decrement(product.id);
+
+      if (quantity <= 1) {
+        notify.undo('Убрано из корзины', () => add(product.id));
+      }
+    }, [decrement, add, product.id, quantity]),
   };
 };

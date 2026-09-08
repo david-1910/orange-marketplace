@@ -46,4 +46,5 @@ export {
 } from './SplitText';
 export { SpotlightCard, type SpotlightCardProps } from './SpotlightCard';
 export { TiltedCard, type TiltedCardProps } from './TiltedCard';
+export { Toaster } from './Toaster';
 export * from './icons';

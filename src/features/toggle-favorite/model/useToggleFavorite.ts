@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { useFavoriteActions, useIsFavorite } from '@/entities/favorite';
+import { notify } from '@/shared/lib';
 
 export interface ToggleFavorite {
   isFavorite: boolean;
@@ -23,6 +24,22 @@ export const useToggleFavorite = (productId: string): ToggleFavorite => {
   return {
     isFavorite,
     label: isFavorite ? 'Убрать из избранного' : 'В избранное',
-    toggle: useCallback(() => toggle(productId), [toggle, productId]),
+    /**
+     * Уведомление живёт здесь, в модели сценария, а не в кнопке:
+     * сердечко стоит и в карточке, и в строке корзины, и в двух местах
+     * пришлось бы повторять один и тот же текст.
+     *
+     * Убранное из избранного возвращается кнопкой в уведомлении: клик
+     * по сердечку легко сделать случайно, а собранный список жаль.
+     */
+    toggle: useCallback(() => {
+      toggle(productId);
+
+      if (isFavorite) {
+        notify.undo('Убрано из избранного', () => toggle(productId));
+      } else {
+        notify.info('Добавлено в избранное');
+      }
+    }, [toggle, productId, isFavorite]),
   };
 };

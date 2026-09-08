@@ -7,6 +7,7 @@ import {
   useOrder,
 } from '@/entities/order';
 import { buildProductImage, formatPrice } from '@/entities/product';
+import { useUser } from '@/entities/user';
 import { ROUTES, buildPath } from '@/shared/config';
 import { cn } from '@/shared/lib';
 import {
@@ -37,7 +38,19 @@ const formatCreatedAt = (createdAt: string): string =>
  */
 export function OrderPage() {
   const { id } = useParams<'id'>();
-  const order = useOrder(id);
+  const found = useOrder(id);
+  const user = useUser();
+
+  /**
+   * Заказ показывается только тому, на чей номер он оформлен.
+   *
+   * Ссылка на заказ угадываема не больше, чем uuid, но заказы лежат в
+   * localStorage браузера: без этой проверки человек, вошедший под
+   * другим номером, открыл бы чужой чек с адресом и телефоном по
+   * прямой ссылке из истории браузера.
+   */
+  const order =
+    found && user && found.recipient.phone === user.phone ? found : null;
 
   // Хук вызывается всегда, даже когда заказа нет: правила хуков не
   // позволяют условный вызов. Пустая строка даст «Доставлен», но это
@@ -50,7 +63,7 @@ export function OrderPage() {
         <EmptyState
           icon={<LogoMonogram className="size-16" />}
           title="Заказ не найден"
-          description="Возможно, ссылка устарела или заказ оформлен в другом браузере."
+          description="Возможно, ссылка устарела, заказ оформлен в другом браузере или на другой номер."
           action={
             <Link
               to={ROUTES.catalog}

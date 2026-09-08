@@ -1,8 +1,9 @@
 import { Link } from 'react-router';
 
-import { useOrders } from '@/entities/order';
-import { useUser, useUserActions } from '@/entities/user';
+import { useOrdersByPhone } from '@/entities/order';
+import { useUser } from '@/entities/user';
 import { SignInButton } from '@/features/sign-in';
+import { useSignOut } from '@/features/sign-out';
 import { ROUTES } from '@/shared/config';
 import {
   EmptyState,
@@ -18,15 +19,17 @@ import { ProfileNameField } from './ProfileNameField';
 /**
  * Профиль: данные покупателя и история заказов.
  *
- * Заказы лежат в своей сущности и не привязаны к пользователю: без
- * бэкенда «мои заказы» — это всё, что оформлено в этом браузере.
- * Привязка по phone появится вместе с сервером, и меняться будет
- * запрос, а не эта страница.
+ * История отбирается по номеру телефона, на который оформлен заказ.
+ * Без бэкенда заказы всё равно лежат в этом браузере, но показывать
+ * их нужно только владельцу: иначе выход и вход под другим номером
+ * открывали чужие покупки.
  */
 export function ProfilePage() {
   const user = useUser();
-  const { signOut } = useUserActions();
-  const orders = useOrders();
+  const signOut = useSignOut();
+  // Только заказы этого номера: иначе после входа под другим
+  // телефоном в истории оказывались чужие покупки.
+  const orders = useOrdersByPhone(user?.phone);
 
   return (
     <div className="mx-auto w-full max-w-[90rem] px-4 pt-28 pb-20 sm:px-8 sm:pt-32">
