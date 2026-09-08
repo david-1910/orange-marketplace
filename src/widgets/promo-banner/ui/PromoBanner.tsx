@@ -1,11 +1,7 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 
-import {
-  MOTION_TRANSITION,
-  buildCatalogPath,
-  cursorLabel,
-} from '@/shared/config';
+import { MOTION_TRANSITION, ROUTES, cursorLabel } from '@/shared/config';
 import { IconArrowUpRight, IconTag } from '@/shared/ui';
 
 const PROMO_CODE = 'ORANGE20';
@@ -42,7 +38,7 @@ export function PromoBanner() {
           </code>
 
           <Link
-            to={buildCatalogPath()}
+            to={ROUTES.catalog}
             {...cursorLabel('в каталог')}
             className="text-label text-brand-600 flex items-center gap-2 rounded-full bg-white px-6 py-4 uppercase transition-transform hover:-translate-y-0.5"
           >

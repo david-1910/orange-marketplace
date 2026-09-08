@@ -1,15 +1,15 @@
 import { Link } from 'react-router';
 
-import { ROUTES, buildCatalogPath, cursorLabel } from '@/shared/config';
+import { ROUTES, cursorLabel } from '@/shared/config';
 import { IconCardPay, IconTruck, LogoFull, Magnet } from '@/shared/ui';
 
 const LINK_GROUPS = [
   {
     title: 'Покупателям',
     links: [
-      { label: 'Каталог', to: buildCatalogPath() },
-      { label: 'Доставка', to: buildCatalogPath() },
-      { label: 'Возврат', to: buildCatalogPath() },
+      { label: 'Каталог', to: ROUTES.catalog },
+      { label: 'Доставка', to: ROUTES.catalog },
+      { label: 'Возврат', to: ROUTES.catalog },
     ],
   },
   {

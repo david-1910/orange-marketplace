@@ -1,6 +1,10 @@
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 
-import { ProductCard, useProducts } from '@/entities/product';
+import {
+  ProductCard,
+  type ProductFilters,
+  useProducts,
+} from '@/entities/product';
 import { AddToCartButton } from '@/features/add-to-cart';
 import { MOTION_STAGGER, MOTION_TRANSITION } from '@/shared/config';
 import { EmptyState, ErrorState, Skeleton } from '@/shared/ui';
@@ -10,6 +14,15 @@ export interface ProductGridProps {
   /** Сколько товаров показать. Без лимита — все. */
   limit?: number;
 }
+
+/** Пропсы виджета в фильтры запроса: лимит режет источник, а не клиент. */
+const toFilters = ({
+  categoryId,
+  limit,
+}: ProductGridProps): ProductFilters => ({
+  ...(categoryId ? { categoryId } : {}),
+  ...(limit ? { limit } : {}),
+});
 
 /** Пять товаров в ряд на широком экране, два на телефоне. */
 const GRID_CLASSES =
@@ -36,17 +49,18 @@ const CARD_VARIANTS = {
  * живёт в entities и не может импортировать features.
  */
 export function ProductGrid({ categoryId, limit }: ProductGridProps) {
-  const { data, isPending, isError, refetch } = useProducts(
-    categoryId ? { categoryId } : {},
-  );
-
-  const products = limit ? data?.slice(0, limit) : data;
+  const {
+    data: products,
+    isPending,
+    isError,
+    refetch,
+  } = useProducts(toFilters({ categoryId, limit }));
 
   if (isPending) {
     return (
       <div className={GRID_CLASSES}>
         {Array.from({ length: 10 }, (_, index) => (
-          <Skeleton key={index} className="aspect-[3/4]" />
+          <Skeleton key={index} className="aspect-3/4" />
         ))}
       </div>
     );

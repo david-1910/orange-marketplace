@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 
-import { useCategories } from '@/entities/product';
+import { useCategories } from '@/entities/category';
 import { MOTION_TRANSITION, cursorLabel } from '@/shared/config';
 import { cn } from '@/shared/lib';
 import { Skeleton } from '@/shared/ui';

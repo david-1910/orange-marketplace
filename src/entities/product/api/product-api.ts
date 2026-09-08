@@ -1,11 +1,8 @@
-import { MOCK_CATEGORIES, MOCK_PRODUCTS } from '../model/mocks';
-import type { Category, Product, ProductFilters } from '../model/types';
+import { mockLatency } from '@/shared/api';
 
-/** Имитация сетевой задержки, чтобы состояния загрузки были видны. */
-const MOCK_LATENCY = 350;
+import type { Product, ProductFilters } from '../model/types';
 
-const delay = (ms: number) =>
-  new Promise<void>((resolve) => window.setTimeout(resolve, ms));
+import { MOCK_PRODUCTS } from './mocks';
 
 /**
  * Здесь и ниже — единственное место, которое поменяется при появлении
@@ -19,26 +16,24 @@ const delay = (ms: number) =>
 export const getProductsRequest = async (
   filters: ProductFilters = {},
 ): Promise<Product[]> => {
-  await delay(MOCK_LATENCY);
+  await mockLatency();
 
-  if (!filters.categoryId) return MOCK_PRODUCTS;
+  const byCategory = filters.categoryId
+    ? MOCK_PRODUCTS.filter(
+        (product) => product.categoryId === filters.categoryId,
+      )
+    : MOCK_PRODUCTS;
 
-  return MOCK_PRODUCTS.filter(
-    (product) => product.categoryId === filters.categoryId,
-  );
+  // Лимит применяет источник данных, а не компонент: иначе главная
+  // качала бы весь каталог, чтобы показать первые десять товаров.
+  return filters.limit ? byCategory.slice(0, filters.limit) : byCategory;
 };
 
 export const getProductRequest = async (id: string): Promise<Product> => {
-  await delay(MOCK_LATENCY);
+  await mockLatency();
 
   const product = MOCK_PRODUCTS.find((item) => item.id === id);
   if (!product) throw new Error(`Товар "${id}" не найден`);
 
   return product;
-};
-
-export const getCategoriesRequest = async (): Promise<Category[]> => {
-  await delay(MOCK_LATENCY);
-
-  return MOCK_CATEGORIES;
 };

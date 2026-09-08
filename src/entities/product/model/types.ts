@@ -1,10 +1,3 @@
-export interface Category {
-  id: string;
-  title: string;
-  /** Эмодзи-заглушка вместо изображения — так задано брифом. */
-  emoji: string;
-}
-
 export interface Product {
   id: string;
   title: string;
@@ -30,4 +23,6 @@ export interface Product {
 
 export interface ProductFilters {
   categoryId?: string;
+  /** Сколько товаров вернуть. Без лимита — все. */
+  limit?: number;
 }

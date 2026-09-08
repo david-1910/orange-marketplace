@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router';
 
+import { useCategory } from '@/entities/category';
 import {
   formatPrice,
   getDiscountPercent,
-  useCategories,
   useProduct,
 } from '@/entities/product';
 import { AddToCartButton } from '@/features/add-to-cart';
@@ -27,11 +27,11 @@ import { ProductGallery } from '@/widgets/product-gallery';
 export function ProductPage() {
   const { id } = useParams<'id'>();
   const { data: product, isPending, isError, refetch } = useProduct(id);
-  const { data: categories } = useCategories();
+  const { data: category } = useCategory(product?.categoryId);
 
   if (isPending) {
     return (
-      <div className="mx-auto grid w-full max-w-[90rem] gap-10 px-4 pt-28 pb-20 sm:px-8 lg:grid-cols-12">
+      <div className="mx-auto grid w-full max-w-360 gap-10 px-4 pt-28 pb-20 sm:px-8 lg:grid-cols-12">
         <Skeleton className="aspect-square lg:col-span-7" />
         <div className="flex flex-col gap-4 lg:col-span-5">
           <Skeleton className="h-5 w-32" />
@@ -56,10 +56,9 @@ export function ProductPage() {
   }
 
   const discount = getDiscountPercent(product);
-  const category = categories?.find((item) => item.id === product.categoryId);
 
   return (
-    <div className="mx-auto grid w-full max-w-[90rem] gap-10 px-4 pt-24 pb-16 sm:px-8 lg:grid-cols-12 lg:gap-16">
+    <div className="mx-auto grid w-full max-w-360 gap-10 px-4 pt-24 pb-16 sm:px-8 lg:grid-cols-12 lg:gap-16">
       <div className="lg:col-span-7">
         <div className="lg:sticky lg:top-24">
           <ProductGallery product={product} />

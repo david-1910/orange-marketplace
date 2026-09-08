@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-import { buildCatalogPath, cursorLabel } from '@/shared/config';
+import { ROUTES, cursorLabel } from '@/shared/config';
 import { IconArrowUpRight, SectionHeading } from '@/shared/ui';
 import { CategoryStrip } from '@/widgets/category-strip';
 import { HeroPoster } from '@/widgets/hero-poster';
@@ -29,7 +29,7 @@ export function HomePage() {
           className="mb-6"
           action={
             <Link
-              to={buildCatalogPath()}
+              to={ROUTES.catalog}
               {...cursorLabel('все товары')}
               className="text-label hover:border-brand-500 hover:text-brand-600 flex items-center gap-2 rounded-full border border-gray-900/10 px-5 py-3 text-gray-900 uppercase transition-colors"
             >

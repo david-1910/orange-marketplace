@@ -5,10 +5,4 @@ export {
   MOTION_STAGGER,
   MOTION_TRANSITION,
 } from './motion';
-export {
-  CATALOG_CATEGORY_PARAM,
-  ROUTES,
-  buildCatalogPath,
-  buildPath,
-  type TRoutePattern,
-} from './routes';
+export { ROUTES, buildPath, type TRoutePattern } from './routes';

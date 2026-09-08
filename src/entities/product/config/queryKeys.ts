@@ -5,6 +5,8 @@ import type { ProductFilters } from '../model/types';
  * сбрасывает и списки, и карточки товаров одним вызовом.
  *
  * Лежит в config, а не в api: это набор констант, а не запрос.
+ * Наружу из слайса не экспортируется — инвалидация кеша сущности
+ * остаётся её собственным делом.
  */
 export const productKeys = {
   all: ['product'] as const,
@@ -12,9 +14,4 @@ export const productKeys = {
   list: (filters: ProductFilters) => [...productKeys.lists(), filters] as const,
   details: () => [...productKeys.all, 'detail'] as const,
   detail: (id: string) => [...productKeys.details(), id] as const,
-};
-
-export const categoryKeys = {
-  all: ['category'] as const,
-  list: () => [...categoryKeys.all, 'list'] as const,
 };

@@ -1,14 +1,13 @@
-import type { Category, Product } from './types';
+import type { Product } from '../model/types';
 
-export const MOCK_CATEGORIES: Category[] = [
-  { id: 'electronics', title: 'Электроника', emoji: '📱' },
-  { id: 'audio', title: 'Аудио', emoji: '🎧' },
-  { id: 'shoes', title: 'Обувь', emoji: '👟' },
-  { id: 'watches', title: 'Часы', emoji: '⌚' },
-  { id: 'home', title: 'Для дома', emoji: '🪴' },
-  { id: 'sport', title: 'Спорт', emoji: '🏀' },
-];
-
+/**
+ * Фикстуры лежат в api, а не в model: это подменённый источник
+ * данных, то есть та же ответственность, что и у запроса. Когда
+ * появится бэкенд, каталог api меняется целиком, model не трогаем.
+ *
+ * categoryId — просто строка: сущность «товар» не импортирует
+ * сущность «категория», связку делают страница и виджет.
+ */
 export const MOCK_PRODUCTS: Product[] = [
   {
     id: 'iphone-15-pro',
