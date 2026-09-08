@@ -156,7 +156,7 @@ export function ScrollSwiper({
         role="group"
         aria-label={ariaLabel}
         className={cn(
-          'flex snap-x snap-mandatory [scrollbar-width:thin] [scrollbar-color:var(--color-brand-300)_transparent] overflow-x-auto overflow-y-hidden',
+          'flex snap-x snap-mandatory scrollbar-thin [scrollbar-color:var(--color-brand-300)_transparent] overflow-x-auto overflow-y-hidden',
           trackClassName,
         )}
       >

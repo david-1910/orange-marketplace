@@ -68,7 +68,7 @@ export function PromoStrip({ className }: PromoStripProps) {
                   onClick={() => void copy(promo.code)}
                   aria-label={`Скопировать промокод ${promo.code}, скидка ${promo.percent} процентов, ${promo.hint}`}
                   className={cn(
-                    'flex h-[114px] w-full flex-col items-start gap-0.5 rounded-xl border border-dashed px-4 py-2.5 text-left transition-colors',
+                    'flex h-28.5 w-full flex-col items-start gap-0.5 rounded-xl border border-dashed px-4 py-2.5 text-left transition-colors',
                     isCopied
                       ? 'text-brand-600 border-white bg-white'
                       : 'border-white/50 bg-white/10 text-white hover:bg-white/20',
